@@ -1,6 +1,6 @@
 {
   "name" : "gulp-es6-sass" ,
-  "version" : "0.0.1" ,
+  "version" : "0.0.2" ,
   "description" : "一个集成了转换 *.es6 与 *.scss 文件的模块。支持监听文件变化并实时转换。" ,
   "author" : {
     "name" : "Milk Lee" ,
@@ -12,6 +12,12 @@
     "type" : "git" ,
     "url" : "https://github.com/lmk123/gulp-es6-sass.git"
   } ,
+  "keywords" : [
+    "gulp" ,
+    "sass" ,
+    "babel" ,
+    "es6"
+  ] ,
   "license" : "MIT" ,
   "dependencies" : {
     "gulp-sass" : "*" ,
