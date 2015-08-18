@@ -29,7 +29,7 @@ require('gulp-es6-sass')(gulp, options);
  
 ## 设置项
  
- 所有设置项及其默认值都在[这里](https://github.com/lmk123/app-another-one/blob/master/index.js#L8)
+ 所有设置项及其默认值都在[这里](https://github.com/lmk123/gulp-es6-sass/blob/master/index.js#L8)
 
 ## 许可
 MIT
