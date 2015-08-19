@@ -97,8 +97,7 @@ function main( gulp , options ) {
     function compileEs6( path , dest ) {
         return gulp.src( path || es6Path )
             .pipe( babel().on( 'error' , logError ) )
-            .pipe( gulp.dest( dest || SRC ) )
-            .on( 'error' , logError );
+            .pipe( gulp.dest( dest || SRC ) );
     }
 
     /**
