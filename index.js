@@ -52,7 +52,8 @@ function main( gulp , options ) {
     function watchChange() {
         watch( es6AndSassPath , function ( e ) {
             var fileFullPath = e.path ,
-                isScss       = '.scss' === e.extname;
+                isScss       = '.scss' === e.extname ,
+                isUnder      = '_' === e.basename[ 0 ];
 
             switch ( e.event ) {
                 case 'change':
@@ -60,7 +61,7 @@ function main( gulp , options ) {
 
                     // scss 比较特殊，如果改动的是以下划线（_）开头的文件，就全部编译一次
                     if ( isScss ) {
-                        if ( '_' === e.basename[ 0 ] ) {
+                        if ( isUnder ) {
                             console.warn( '检测到更改了以下划线开头的 scss 文件（' + e.basename + '），正在重新编译整个项目……' );
                             compileSass()
                                 .on( 'finish' , function () {
@@ -74,6 +75,7 @@ function main( gulp , options ) {
                     }
                     break;
                 case 'unlink':
+                    if ( isScss && isUnder ) { return; }
                     var path = fileFullPath.slice( 0 , fileFullPath.lastIndexOf( '.' ) ) + (isScss ? '.css' : '.js');
                     fs.unlink( path/* , function () {
                      console.log( 'Deleted file:' + path );
