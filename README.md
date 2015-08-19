@@ -32,6 +32,8 @@ Now use them like this!
 gulp compile
 gulp watch-es6-sass
 ```
+
+You may need [gulp-compress](https://www.npmjs.com/package/gulp-compress) else :)
  
 ## Options
 
