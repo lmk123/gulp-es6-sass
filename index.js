@@ -18,16 +18,17 @@ module.exports = main;
  * @params {Function} [options.logError] - 用于输出错误消息的函数
  */
 function main( gulp , options ) {
-    var options        = options || {} ,
-        SRC            = options.src || '.' ,
-        es6Path        = options.es6Path || [ SRC + '/**/*.es6' ] ,
-        sassPath       = options.sassPath || [ SRC + '/**/*.scss' ] ,
+    var options         = options || {} ,
+        SRC             = options.src || '.' ,
+        es6Path         = options.es6Path || [ SRC + '/**/*.es6' ] ,
+        sassPath        = options.sassPath || [ SRC + '/**/*.scss' ] ,
 
-        es6AndSassPath = options.es6AndSassPath || es6Path.concat( sassPath ) ,
-        watchTaskName  = options.watchTaskName || 'watch-es6-sass' ,
-        es6TaskName    = options.es6TaskName || 'compile-es6' ,
-        sassTaskName   = options.sassTaskName || 'compile-sass' ,
-        logError       = options.logError || function ( err ) {
+        es6AndSassPath  = options.es6AndSassPath || es6Path.concat( sassPath ) ,
+        watchTaskName   = options.watchTaskName || 'watch-es6-sass' ,
+        es6TaskName     = options.es6TaskName || 'compile-es6' ,
+        sassTaskName    = options.sassTaskName || 'compile-sass' ,
+        compileTaskName = options.compileTaskName || 'compile' ,
+        logError        = options.logError || function ( err ) {
                 console.error( err );
             };
 
@@ -45,6 +46,8 @@ function main( gulp , options ) {
     gulp.task( sassTaskName , function () {
         return compileSass();
     } );
+
+    gulp.task( compileTaskName , [ es6TaskName , sassTaskName ] );
 
     /**
      * 监听文件变化并自动编译

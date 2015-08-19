@@ -1,16 +1,14 @@
 # gulp-es6-sass
 
-一个集成了 *.es6 与 *.scss 文件转换功能的模块。支持监听文件变化并实时转换。
+An easy-to-use module to complie your *.es6 and *.sass files. Support watch changes and instantly compile them.
 
-## 安装与使用
-
-通过 npm 安装：
+## Install
 
 ```
 npm install gulp-es6-sass
 ```
 
-然后在代码里使用：
+## Usage
 
 ```js
 var gulp    = require('gulp'),
@@ -21,15 +19,23 @@ var gulp    = require('gulp'),
 require('gulp-es6-sass')(gulp, options);
 ```
 
-这样就有三个任务添加到了你的 gulp 中：
+There are few tasks added in your gulp:
 
- + `compile-es6` : 将指定的 *.es6 文件转换成 *.js 文件并输出到同级目录
- + `compile-sass`：将指定的 *.scss 文件转换成 *.css 文件并输出到同级目录
- + `watch-es6-sass`：这是一个持续执行的任务，除非你手动终结。监听目录下 *.es6 与 *.scss 文件的变化并实时自动进行转换。
+ + `compile-es6` : Compile all of the *.es6 files under the `options.src` and output to the same directory.
+ + `compile-sass`：Compile all of the *.scss files under the `options.src` and output to the same directory.
+ + `compile` : It's run `compile-es6` and `compile-sass` parallel.
+ + `watch-es6-sass`：Watch files changes and compile them instantly.
  
-## 设置项
- 
- 所有设置项及其默认值都在[这里](https://github.com/lmk123/gulp-es6-sass/blob/master/index.js#L8)
+Now use them like this!
 
-## 许可
+```
+gulp compile
+gulp watch-es6-sass
+```
+ 
+## Options
+
+All options and its default value are list on [here](https://github.com/lmk123/gulp-es6-sass/blob/master/index.js#L8). It's really self-explanation.
+
+## License
 MIT
