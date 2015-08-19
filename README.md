@@ -1,6 +1,6 @@
 # gulp-es6-sass
 
-An easy-to-use module to complie your *.es6 and *.sass files. Support watch changes and instantly compile them.
+An easy-to-use module to compile your *.es6 and *.sass files. Support watch changes and instantly compile them.
 
 ## Install
 
