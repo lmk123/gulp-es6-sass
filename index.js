@@ -5,16 +5,23 @@ var fs    = require( 'fs' ) ,
 
 module.exports = main;
 
+main.sass = sass;
+main.babel = babel;
+main.watch = watch;
+
 /**
  * @params {Gulp} gulp - 要附加任务的 gulp 对象，例如 require('gulp')
  * @params {Object} [options] - 设置
  * @params {String} [options.src] - 根目录
+ *
  * @params {String[]} [options.es6Path] - glob 数组，用于匹配要处理的 es6 文件
  * @params {String[]} [options.sassPath] - glob 数组，用于匹配要处理的 sass 文件
  * @params {String[]} [options.es6AndSassPath] - glob 数组，用于匹配要监听的 es6 与 sass 文件
- * @params {String} [options.watchTaskName] - 监听文件变化的任务的名字
- * @params {String} [options.es6TaskName] - 转换 es6 文件的任务的名字
- * @params {String} [options.sassTaskName] - 转换 scss 文件的任务的名字
+ *
+ * @params {String|Boolean} [options.watchTaskName] - 监听文件变化的任务的名字。设为 false 则不会创建任务。
+ * @params {String|Boolean} [options.es6TaskName] - 转换 es6 文件的任务的名字。设为 false 则不会创建任务。
+ * @params {String|Boolean} [options.sassTaskName] - 转换 scss 文件的任务的名字。设为 false 则不会创建任务。
+ *
  * @params {Function} [options.logError] - 用于输出错误消息的函数
  */
 function main( gulp , options ) {
@@ -22,12 +29,13 @@ function main( gulp , options ) {
         SRC             = options.src || '.' ,
         es6Path         = options.es6Path || [ SRC + '/**/*.es6' ] ,
         sassPath        = options.sassPath || [ SRC + '/**/*.scss' ] ,
-
         es6AndSassPath  = options.es6AndSassPath || es6Path.concat( sassPath ) ,
+
         watchTaskName   = options.watchTaskName || 'watch-es6-sass' ,
         es6TaskName     = options.es6TaskName || 'compile-es6' ,
         sassTaskName    = options.sassTaskName || 'compile-sass' ,
         compileTaskName = options.compileTaskName || 'compile' ,
+
         logError        = options.logError || function ( err ) {
                 console.error( err );
             };
@@ -35,19 +43,19 @@ function main( gulp , options ) {
     /**
      * 监视所有以 .es6 .scss 为后缀的文件，并在文件改动时自动转换成正常的 .js .css 文件
      */
-    gulp.task( watchTaskName , function ( done ) { // 带上这个 done 参数，控制台里就不会显示 Finished — 不带上其实任务也仍然在 watch 中
+    watchTaskName && gulp.task( watchTaskName , function ( done ) { // 带上这个 done 参数，控制台里就不会显示 Finished — 不带上其实任务也仍然在 watch 中
         watchChange();
     } );
 
-    gulp.task( es6TaskName , function () {
+    es6TaskName && gulp.task( es6TaskName , function () {
         return compileEs6();
     } );
 
-    gulp.task( sassTaskName , function () {
+    sassTaskName && gulp.task( sassTaskName , function () {
         return compileSass();
     } );
 
-    gulp.task( compileTaskName , [ es6TaskName , sassTaskName ] );
+    compileTaskName && es6TaskName && sassTaskName && gulp.task( compileTaskName , [ es6TaskName , sassTaskName ] );
 
     /**
      * 监听文件变化并自动编译

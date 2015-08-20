@@ -1,6 +1,6 @@
 {
   "name" : "gulp-es6-sass" ,
-  "version" : "0.0.5" ,
+  "version" : "0.0.6" ,
   "description" : "An easy-to-use module to complie your *.es6 and *.sass files. Support watch changes and instantly compile them." ,
   "author" : {
     "name" : "Milk Lee" ,
