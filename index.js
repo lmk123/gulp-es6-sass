@@ -14,9 +14,9 @@ main.watch = watch;
  * @params {Object} [options] - 设置
  * @params {String} [options.src] - 根目录
  *
- * @params {String[]} [options.es6Path] - glob 数组，用于匹配要处理的 es6 文件
- * @params {String[]} [options.sassPath] - glob 数组，用于匹配要处理的 sass 文件
- * @params {String[]} [options.es6AndSassPath] - glob 数组，用于匹配要监听的 es6 与 sass 文件
+ * @params {String[]} [options.es6Files] - glob 数组，用于匹配要处理的 es6 文件
+ * @params {String[]} [options.sassFiles] - glob 数组，用于匹配要处理的 sass 文件
+ * @params {String[]} [options.es6AndSassFiles] - glob 数组，用于匹配要监听的 es6 与 sass 文件
  *
  * @params {String|Boolean} [options.watchTaskName] - 监听文件变化的任务的名字。设为 false 则不会创建任务。
  * @params {String|Boolean} [options.es6TaskName] - 转换 es6 文件的任务的名字。设为 false 则不会创建任务。
@@ -27,9 +27,9 @@ main.watch = watch;
 function main( gulp , options ) {
     var options         = options || {} ,
         SRC             = options.src || '.' ,
-        es6Path         = options.es6Path || [ SRC + '/**/*.es6' ] ,
-        sassPath        = options.sassPath || [ SRC + '/**/*.scss' ] ,
-        es6AndSassPath  = options.es6AndSassPath || es6Path.concat( sassPath ) ,
+        es6Path         = options.es6Files || [ SRC + '/**/*.es6' ] ,
+        sassPath        = options.sassFiles || [ SRC + '/**/*.scss' ] ,
+        es6AndSassPath  = options.es6AndSassFiles || es6Path.concat( sassPath ) ,
 
         watchTaskName   = options.watchTaskName || 'watch-es6-sass' ,
         es6TaskName     = options.es6TaskName || 'compile-es6' ,
@@ -60,8 +60,8 @@ function main( gulp , options ) {
     /**
      * 监听文件变化并自动编译
      */
-    function watchChange() {
-        watch( es6AndSassPath , function ( e ) {
+    function watchChange( path ) {
+        watch( path || es6AndSassPath , function ( e ) {
             var fileFullPath = e.path ,
                 isScss       = '.scss' === e.extname ,
                 isUnder      = '_' === e.basename[ 0 ];
@@ -125,6 +125,29 @@ function main( gulp , options ) {
     return {
         compileEs6 : compileEs6 ,
         compileSass : compileSass ,
+        compile : function ( cb ) {
+            parallel( [ compileEs6 , compileSass ] , cb );
+        } ,
         watchChange : watchChange
     };
+}
+
+/**
+ * 平行执行多个任务
+ * @param {Function[]} tasks - 任务数组
+ * @param {Function} [cb] - 全部任务都完成的回调函数，可选。
+ */
+function parallel( tasks , cb ) {
+    var count = 0 , all = tasks.length;
+
+    tasks.forEach( function ( func ) {
+        func().on( 'finish' , done );
+    } );
+
+    function done() {
+        count += 1;
+        if ( count === all ) {
+            cb && cb();
+        }
+    }
 }
